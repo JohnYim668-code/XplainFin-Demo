@@ -23,6 +23,12 @@ export default function Dashboard({ progress, totalLessons }) {
         <article className="card">
           <h3>Points</h3>
           <p className="metric">{progress.points}</p>
+          <p className="card-hint muted">From quiz challenges</p>
+        </article>
+        <article className="card">
+          <h3>Lesson XP</h3>
+          <p className="metric">{progress.xp ?? 0}</p>
+          <p className="card-hint muted">From lesson questions</p>
         </article>
         <article className="card">
           <h3>Streak</h3>

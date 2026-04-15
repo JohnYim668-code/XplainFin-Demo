@@ -10,6 +10,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [progress, setProgress] = useState({
     points: 0,
+    xp: 0,
     streak: 1,
     completedLessons: []
   });
@@ -26,6 +27,10 @@ export default function App() {
 
   const awardPoints = (points) => {
     setProgress((prev) => ({ ...prev, points: prev.points + points }));
+  };
+
+  const awardXp = (amount) => {
+    setProgress((prev) => ({ ...prev, xp: prev.xp + amount }));
   };
 
   const completeLesson = (lessonId) => {
@@ -61,7 +66,7 @@ export default function App() {
           modules={learningPathModules}
           completedLessons={progress.completedLessons}
           onCompleteLesson={completeLesson}
-          onAwardPoints={awardPoints}
+          onAwardXp={awardXp}
         />
       ) : null}
 

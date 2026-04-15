@@ -92,6 +92,11 @@ body {
   font-weight: 700;
 }
 
+.card-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+}
+
 .progress-wrap {
   height: 12px;
   background: #e5e7eb;
@@ -273,6 +278,203 @@ body {
 
 .lesson-complete-btn {
   margin-top: 0.8rem;
+}
+
+.lesson-flow-panel {
+  position: relative;
+  padding-bottom: 5rem;
+}
+
+.lesson-intro-card {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.lesson-intro-summary {
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+}
+
+.lesson-intro-meta {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.question-page {
+  margin-top: 1rem;
+}
+
+.question-page-kicker {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+}
+
+.question-submit {
+  margin-top: 0.75rem;
+}
+
+.tf-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.tf-row .btn {
+  min-width: 120px;
+}
+
+.lesson-xp-inline {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.ask-ai-fab {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 999px;
+  box-shadow: 0 10px 28px rgba(79, 70, 229, 0.22);
+  line-height: 0;
+}
+
+.ask-ai-fab:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.ask-ai-fab.active {
+  outline: 3px solid #a78bfa;
+  outline-offset: 3px;
+}
+
+.ask-ai-fab-art {
+  display: block;
+  width: min(220px, calc(100vw - 2rem));
+  height: auto;
+  max-height: 58px;
+  object-fit: contain;
+}
+
+.ask-ai-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 5.75rem;
+  z-index: 51;
+  width: min(420px, calc(100vw - 2rem));
+  max-height: min(70vh, 520px);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  padding: 0.75rem;
+}
+
+.ask-ai-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.ask-ai-panel-title {
+  margin: 0;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.ask-ai-panel-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+}
+
+.ask-ai-close {
+  flex-shrink: 0;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+.ask-ai-context {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  max-height: 3.2rem;
+  overflow: hidden;
+}
+
+.ask-ai-messages {
+  margin-top: 0.6rem;
+  flex: 1;
+  min-height: 140px;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.5rem;
+  background: #f8fafc;
+}
+
+.ask-ai-empty {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.ask-ai-msg {
+  margin: 0.4rem 0;
+  padding: 0.45rem 0.55rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ask-ai-msg.user {
+  background: #dbeafe;
+  margin-left: 1.5rem;
+}
+
+.ask-ai-msg.assistant {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  margin-right: 1rem;
+}
+
+.ask-ai-input-row {
+  margin-top: 0.55rem;
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-end;
+}
+
+.ask-ai-input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.45rem;
+  font: inherit;
+  resize: vertical;
+  min-height: 52px;
+}
+
+.ask-ai-send {
+  flex-shrink: 0;
 }
 
 .completion-panel {

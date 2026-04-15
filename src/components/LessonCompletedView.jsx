@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function LessonCompletedView({ lesson, onBackToPath, onRetryLesson }) {
+export default function LessonCompletedView({ lesson, xpEarned = 0, onBackToPath, onRetryLesson }) {
   return (
     <section className="panel completion-panel">
       <p className="completion-kicker">Lesson completed!</p>
@@ -12,11 +12,11 @@ export default function LessonCompletedView({ lesson, onBackToPath, onRetryLesso
       <div className="completion-stats">
         <div>
           <p className="muted">XP earned</p>
-          <p className="metric">+45</p>
+          <p className="metric">+{xpEarned}</p>
         </div>
         <div>
-          <p className="muted">Score</p>
-          <p className="metric">100%</p>
+          <p className="muted">Questions</p>
+          <p className="metric">Done</p>
         </div>
       </div>
 

@@ -3,11 +3,12 @@ import LearningPathView from "./LearningPathView";
 import LessonDetailView from "./LessonDetailView";
 import LessonCompletedView from "./LessonCompletedView";
 
-export default function Lessons({ modules, completedLessons, onCompleteLesson, onAwardPoints }) {
+export default function Lessons({ modules, completedLessons, onCompleteLesson, onAwardXp }) {
   const [expandedModuleIds, setExpandedModuleIds] = React.useState([modules[0]?.id]);
   const [activeModule, setActiveModule] = React.useState(null);
   const [activeLesson, setActiveLesson] = React.useState(null);
   const [view, setView] = React.useState("path");
+  const [lastLessonXp, setLastLessonXp] = React.useState(0);
 
   const handleToggleModule = (moduleId) => {
     setExpandedModuleIds((prev) =>
@@ -21,20 +22,22 @@ export default function Lessons({ modules, completedLessons, onCompleteLesson, o
     setView("lesson");
   };
 
-  const handleCompleteLesson = () => {
-    if (!activeLesson) return;
-    onCompleteLesson(activeLesson.id);
-    onAwardPoints(20);
+  const handleLessonFinished = (lessonId, xpEarned) => {
+    setLastLessonXp(xpEarned);
+    onCompleteLesson(lessonId);
     setView("completed");
   };
 
   if (view === "lesson" && activeLesson && activeModule) {
     return (
       <LessonDetailView
+        key={activeLesson.id}
         module={activeModule}
         lesson={activeLesson}
+        isReview={completedLessons.includes(activeLesson.id)}
         onBackToPath={() => setView("path")}
-        onCompleteLesson={handleCompleteLesson}
+        onCompleteLesson={handleLessonFinished}
+        onAwardXp={onAwardXp}
       />
     );
   }
@@ -43,6 +46,7 @@ export default function Lessons({ modules, completedLessons, onCompleteLesson, o
     return (
       <LessonCompletedView
         lesson={activeLesson}
+        xpEarned={lastLessonXp}
         onBackToPath={() => setView("path")}
         onRetryLesson={() => setView("lesson")}
       />
