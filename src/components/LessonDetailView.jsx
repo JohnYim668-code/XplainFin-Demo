@@ -156,10 +156,7 @@ export default function LessonDetailView({
 
   const questionPrompt = currentStep ? currentStep.prompt : "";
 
-  const askAiFabVisible =
-    phaseIndex >= 0 &&
-    currentStep &&
-    (currentStep.kind === "open" || wrongAttempts >= 3);
+  const askAiFabVisible = true;
 
   return (
     <section className="panel lesson-flow-panel">

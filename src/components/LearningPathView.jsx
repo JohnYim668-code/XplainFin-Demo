@@ -35,20 +35,32 @@ export default function LearningPathView({
                 <div className="lesson-node-list">
                   {module.lessons.map((lesson, index) => {
                     const isCompleted = completedLessons.includes(lesson.id);
+                    const isLast = index === module.lessons.length - 1;
+                    const pathDirection = index % 2 ? "right" : "left";
 
                     return (
-                      <button
+                      <div
                         key={lesson.id}
-                        type="button"
-                        className={`path-node lesson-node ${isCompleted ? "completed" : ""} ${
-                          index % 2 ? "offset-right" : "offset-left"
-                        }`}
-                        onClick={() => onOpenLesson(module, lesson)}
+                        className={`lesson-path-step ${pathDirection} ${isCompleted ? "done" : ""}`}
                       >
-                        <span className="node-title">{lesson.code}</span>
-                        <span className="node-subtitle">{lesson.title}</span>
-                        <span className="node-meta">{isCompleted ? "Completed" : "Start lesson"}</span>
-                      </button>
+                        <button
+                          type="button"
+                          className={`path-node lesson-node ${isCompleted ? "completed" : ""} ${
+                            index % 2 ? "offset-right" : "offset-left"
+                          }`}
+                          onClick={() => onOpenLesson(module, lesson)}
+                        >
+                          <span className="node-title">{lesson.code}</span>
+                          <span className="node-subtitle">{lesson.title}</span>
+                          <span className="node-meta">{isCompleted ? "Completed" : "Start lesson"}</span>
+                          <span className="lesson-reward-pill">{isCompleted ? "XP earned" : "Reward: XP"}</span>
+                        </button>
+                        {!isLast ? (
+                          <div className={`lesson-connector ${index % 2 ? "curve-left" : "curve-right"}`}>
+                            <span className="connector-dot" />
+                          </div>
+                        ) : null}
+                      </div>
                     );
                   })}
                 </div>
