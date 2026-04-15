@@ -77,7 +77,7 @@ export default function AskAiPanel({
           aria-label={isOpen ? "Close Ask AI" : "Ask AI"}
           title="Ask AI"
         >
-          <img src="/ask-ai-button.png" alt="Ask AI" className="ask-ai-fab-art" />
+          <img src="/assistant-ai-icon.png" alt="Ask AI assistant icon" className="ask-ai-fab-art" />
         </button>
       ) : null}
 
@@ -103,7 +103,14 @@ export default function AskAiPanel({
             ) : (
               messages.map((m) => (
                 <div key={m.id} className={`ask-ai-msg ${m.role}`}>
-                  {m.text}
+                  {m.role === "assistant" ? (
+                    <img
+                      src="/assistant-ai-icon.png"
+                      alt="AI assistant"
+                      className="ask-ai-msg-avatar"
+                    />
+                  ) : null}
+                  <span>{m.text}</span>
                 </div>
               ))
             )}

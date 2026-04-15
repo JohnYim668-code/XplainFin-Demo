@@ -52,7 +52,8 @@ export default function App() {
     <main className="app-shell">
       <header className="app-header">
         <h1>XplainFin</h1>
-        <p>Learn investing through short lessons and game-like challenges.</p>
+        <div className="app-header-divider" />
+        <p className="app-hero-subtitle">Learn money skills with real market data.</p>
       </header>
 
       <NavTabs activeTab={activeTab} onTabChange={setActiveTab} />
