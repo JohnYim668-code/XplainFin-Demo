@@ -1,0 +1,63 @@
+import React from "react";
+
+export default function Dashboard({ progress, totalLessons }) {
+  const completedCount = progress.completedLessons.length;
+  const completionRate = Math.round((completedCount / totalLessons) * 100);
+
+  // Basic gamification badges based on milestones.
+  const badges = [
+    completedCount >= 1 ? "First Lesson" : null,
+    completedCount >= 3 ? "Momentum Builder" : null,
+    completedCount >= 6 ? "Curriculum Finisher" : null,
+    progress.streak >= 3 ? "3-Day Streak" : null
+  ].filter(Boolean);
+
+  return (
+    <section className="panel">
+      <h2>Dashboard</h2>
+      <p className="muted">
+        Track your growth as you move through investment concepts.
+      </p>
+
+      <div className="card-grid">
+        <article className="card">
+          <h3>Points</h3>
+          <p className="metric">{progress.points}</p>
+        </article>
+        <article className="card">
+          <h3>Streak</h3>
+          <p className="metric">{progress.streak} days</p>
+        </article>
+        <article className="card">
+          <h3>Completed Lessons</h3>
+          <p className="metric">
+            {completedCount} / {totalLessons}
+          </p>
+        </article>
+        <article className="card">
+          <h3>Progress</h3>
+          <p className="metric">{completionRate}%</p>
+        </article>
+      </div>
+
+      <div className="progress-wrap" aria-label="Completion progress">
+        <div className="progress-bar" style={{ width: `${completionRate}%` }} />
+      </div>
+
+      <div className="badge-area">
+        <h3>Badges</h3>
+        {badges.length ? (
+          <ul className="badge-list">
+            {badges.map((badge) => (
+              <li key={badge} className="badge">
+                {badge}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="muted">Complete lessons and quizzes to unlock badges.</p>
+        )}
+      </div>
+    </section>
+  );
+}
