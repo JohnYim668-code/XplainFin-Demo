@@ -4,12 +4,15 @@ import Dashboard from "./components/Dashboard";
 import Lessons from "./components/Lessons";
 import QuizChallenges from "./components/QuizChallenges";
 import ExploreWithPulse from "./components/ExploreWithPulse";
+import Arena from "./components/Arena";
+import LearningTwinDrawer from "./components/LearningTwinDrawer";
 import { modules, quizByLesson } from "./data/curriculum";
 import { learningPathModules } from "./data/learningPathData";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [focusLessonId, setFocusLessonId] = useState(null);
+  const [twinOpen, setTwinOpen] = useState(false);
   const [lessonTelemetry, setLessonTelemetry] = useState({
     totalAttempts: 0,
     totalIncorrect: 0,
@@ -17,7 +20,8 @@ export default function App() {
   });
   const [chatTelemetry, setChatTelemetry] = useState({
     sentimentCounts: { positive: 0, neutral: 0, negative: 0 },
-    confidenceCounts: { high: 0, medium: 0, low: 0 }
+    confidenceCounts: { high: 0, medium: 0, low: 0 },
+    recentInputs: []
   });
   const [progress, setProgress] = useState({
     points: 0,
@@ -86,7 +90,7 @@ export default function App() {
     }));
   };
 
-  const recordPulseSignal = ({ sentiment, confidence }) => {
+  const recordPulseSignal = ({ sentiment, confidence, text }) => {
     setChatTelemetry((prev) => ({
       sentimentCounts: {
         ...prev.sentimentCounts,
@@ -95,7 +99,8 @@ export default function App() {
       confidenceCounts: {
         ...prev.confidenceCounts,
         [confidence]: (prev.confidenceCounts[confidence] ?? 0) + 1
-      }
+      },
+      recentInputs: [...prev.recentInputs, text].slice(-12)
     }));
   };
 
@@ -168,10 +173,41 @@ export default function App() {
     setActiveTab("lessons");
   };
 
+  const learningGoals = useMemo(() => {
+    const inputs = chatTelemetry.recentInputs.map((x) => x.toLowerCase());
+    const goals = [];
+
+    if (inputs.some((x) => x.includes("laptop") || x.includes("save") || x.includes("budget"))) {
+      goals.push("Save $500 for a new laptop");
+    }
+    if (inputs.some((x) => x.includes("option") || x.includes("derivative"))) {
+      goals.push("Understand Options before June");
+    }
+    if (inputs.some((x) => x.includes("etf") || x.includes("diversification"))) {
+      goals.push("Build a starter ETF watchlist");
+    }
+    if (inputs.some((x) => x.includes("risk") || x.includes("volatility"))) {
+      goals.push("Set personal risk limits for each trade");
+    }
+
+    if (!goals.length) {
+      goals.push("Complete 2 new holds this week");
+      goals.push("Build confidence in ETF diversification");
+    }
+
+    return goals.slice(0, 4);
+  }, [chatTelemetry.recentInputs]);
+
   return (
     <main className="app-shell">
       <header className="app-header">
-        <h1>XplainFin</h1>
+        <div className="app-header-row">
+          <h1>XplainFin</h1>
+          <button type="button" className="twin-open-btn" onClick={() => setTwinOpen(true)}>
+            <img src="/assistant-ai-icon.png" alt="Pulse" className="twin-open-icon" />
+            Learning Twin
+          </button>
+        </div>
         <div className="app-header-divider" />
         <p className="app-hero-subtitle">Learn money skills with real market data.</p>
       </header>
@@ -183,6 +219,8 @@ export default function App() {
           progress={progress}
           totalLessons={totalLessons}
           onOpenWeakTopicLesson={openWeakTopicLesson}
+          riskProfile={adaptiveUserProfile.risk_profile}
+          learningGoals={learningGoals}
         />
       ) : null}
 
@@ -206,6 +244,8 @@ export default function App() {
         />
       ) : null}
 
+      {activeTab === "arena" ? <Arena currentUser={{ id: "demo-user-001", name: "You" }} /> : null}
+
       {activeTab === "quiz" ? (
         <QuizChallenges
           modules={modules}
@@ -214,6 +254,8 @@ export default function App() {
           onCompleteLesson={completeLesson}
         />
       ) : null}
+
+      <LearningTwinDrawer isOpen={twinOpen} onClose={() => setTwinOpen(false)} profile={adaptiveUserProfile} />
     </main>
   );
 }

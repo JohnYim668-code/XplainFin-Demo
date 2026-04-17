@@ -4,6 +4,7 @@ const tabs = [
   { id: "dashboard", label: "Home / Dashboard" },
   { id: "lessons", label: "Lessons" },
   { id: "explore", label: "Explore with Pulse" },
+  { id: "arena", label: "Arena" },
   { id: "quiz", label: "Quiz / Challenges" }
 ];
 

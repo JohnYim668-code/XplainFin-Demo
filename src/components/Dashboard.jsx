@@ -6,10 +6,16 @@ function describeRiskLevel(score) {
   return "Growth-seeking";
 }
 
-export default function Dashboard({ progress, totalLessons, onOpenWeakTopicLesson }) {
+export default function Dashboard({
+  progress,
+  totalLessons,
+  onOpenWeakTopicLesson,
+  riskProfile,
+  learningGoals = []
+}) {
   const completedCount = progress.completedLessons.length;
   const completionRate = Math.round((completedCount / totalLessons) * 100);
-  const riskAppetiteScore = React.useState(() => Math.floor(Math.random() * 10) + 1)[0];
+  const riskAppetiteScore = riskProfile?.score ?? 5;
   const riskLevel = describeRiskLevel(riskAppetiteScore);
 
   // Basic gamification badges based on milestones.
@@ -53,11 +59,6 @@ export default function Dashboard({ progress, totalLessons, onOpenWeakTopicLesso
           <p className="metric">{completionRate}%</p>
         </article>
         <article className="card">
-          <h3>Risk Appetite Score</h3>
-          <p className="metric">{riskAppetiteScore} / 10</p>
-          <p className="card-hint muted">{riskLevel}</p>
-        </article>
-        <article className="card">
           <h3>Top Weak Topic</h3>
           <p className="metric">ETF Diversification</p>
           <button type="button" className="btn btn-primary" onClick={onOpenWeakTopicLesson}>
@@ -83,6 +84,22 @@ export default function Dashboard({ progress, totalLessons, onOpenWeakTopicLesso
         ) : (
           <p className="muted">Complete lessons and quizzes to unlock badges.</p>
         )}
+      </div>
+
+      <div className="dashboard-profile-panel">
+        <article className="card dashboard-risk-card">
+          <h3>Risk Appetite Score</h3>
+          <p className="metric">{riskAppetiteScore} / 10</p>
+          <p className="card-hint muted">{riskLevel}</p>
+        </article>
+        <article className="card dashboard-goals-card">
+          <h3>Learning Goals</h3>
+          <ul className="dashboard-goal-list">
+            {learningGoals.map((goal) => (
+              <li key={goal}>{goal}</li>
+            ))}
+          </ul>
+        </article>
       </div>
     </section>
   );
