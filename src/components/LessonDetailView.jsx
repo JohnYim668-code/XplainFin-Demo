@@ -17,6 +17,7 @@ export default function LessonDetailView({
   onBackToPath,
   onCompleteLesson,
   onAwardXp,
+  onQuestionAttempt,
   /** True when this lesson was already completed once — lower XP per question */
   isReview = false
 }) {
@@ -31,6 +32,8 @@ export default function LessonDetailView({
 
   const [mcSelection, setMcSelection] = useState(null);
   const [tfSelection, setTfSelection] = useState(null);
+  const [mcResult, setMcResult] = useState(null);
+  const [tfResult, setTfResult] = useState(null);
   const [openText, setOpenText] = useState("");
   const [feedback, setFeedback] = useState("");
   const [wrongAttempts, setWrongAttempts] = useState(0);
@@ -63,6 +66,8 @@ export default function LessonDetailView({
   const resetQuestionInputs = () => {
     setMcSelection(null);
     setTfSelection(null);
+    setMcResult(null);
+    setTfResult(null);
     setOpenText("");
     setFeedback("");
     setWrongAttempts(0);
@@ -103,18 +108,40 @@ export default function LessonDetailView({
     }
 
     if (mcSelection === currentStep.correctAnswer) {
+      onQuestionAttempt?.({
+        lessonId: lesson.id,
+        questionId: currentStep.id,
+        kind: "mc",
+        correct: true
+      });
+      setMcResult({
+        selected: mcSelection,
+        correctAnswer: currentStep.correctAnswer,
+        isCorrect: true
+      });
       const xp = xpForStepKind("mc", isReview);
       setFeedback(`Correct! +${formatXpValue(xp)} XP.`);
       goNextOrFinish(currentStep.id, xp);
       return;
     }
 
+    setMcResult({
+      selected: mcSelection,
+      correctAnswer: currentStep.correctAnswer,
+      isCorrect: false
+    });
+    onQuestionAttempt?.({
+      lessonId: lesson.id,
+      questionId: currentStep.id,
+      kind: "mc",
+      correct: false
+    });
     const nextWrong = wrongAttempts + 1;
     setWrongAttempts(nextWrong);
     if (nextWrong < 3) {
       setFeedback("Not quite—try again.");
     } else {
-      setFeedback("Not quite—try again or use Ask AI.");
+      setFeedback("Not quite—try again or use Ask Pulse.");
       setAskAiOpen(true);
       setHelpNudge(true);
     }
@@ -123,6 +150,17 @@ export default function LessonDetailView({
   const handleTfAnswer = (choice) => {
     if (!currentStep || currentStep.kind !== "tf") return;
     setTfSelection(choice);
+    onQuestionAttempt?.({
+      lessonId: lesson.id,
+      questionId: currentStep.id,
+      kind: "tf",
+      correct: choice === currentStep.answer
+    });
+    setTfResult({
+      selected: choice,
+      answer: currentStep.answer,
+      isCorrect: choice === currentStep.answer
+    });
 
     if (choice === currentStep.answer) {
       const xp = xpForStepKind("tf", isReview);
@@ -136,7 +174,7 @@ export default function LessonDetailView({
     if (nextWrong < 3) {
       setFeedback("Not quite—try again.");
     } else {
-      setFeedback("Not quite—try again or use Ask AI.");
+      setFeedback("Not quite—try again or use Ask Pulse.");
       setAskAiOpen(true);
       setHelpNudge(true);
     }
@@ -150,6 +188,12 @@ export default function LessonDetailView({
       return;
     }
     const xp = xpForStepKind("open", isReview);
+    onQuestionAttempt?.({
+      lessonId: lesson.id,
+      questionId: currentStep.id,
+      kind: "open",
+      correct: true
+    });
     setFeedback(`Nice work! +${formatXpValue(xp)} XP.`);
     goNextOrFinish(currentStep.id, xp);
   };
@@ -211,8 +255,21 @@ export default function LessonDetailView({
                   <button
                     key={option}
                     type="button"
-                    className={`btn ${mcSelection === option ? "btn-primary" : "btn-secondary"}`}
-                    onClick={() => setMcSelection(option)}
+                    className={`btn ${
+                      mcResult
+                        ? option === mcResult.correctAnswer
+                          ? "btn-answer-correct"
+                          : option === mcResult.selected
+                            ? "btn-answer-wrong"
+                            : "btn-secondary"
+                        : mcSelection === option
+                          ? "btn-primary"
+                          : "btn-secondary"
+                    }`}
+                    onClick={() => {
+                      setMcSelection(option);
+                      setMcResult(null);
+                    }}
                   >
                     <span className="option-key">{String.fromCharCode(97 + index)})</span> {option}
                   </button>
@@ -228,14 +285,34 @@ export default function LessonDetailView({
             <div className="tf-row" role="group" aria-label="True or false">
               <button
                 type="button"
-                className={`btn ${tfSelection === true ? "btn-primary" : "btn-secondary"}`}
+                className={`btn ${
+                  tfResult
+                    ? tfResult.answer === true
+                      ? "btn-answer-correct"
+                      : tfResult.selected === true
+                        ? "btn-answer-wrong"
+                        : "btn-secondary"
+                    : tfSelection === true
+                      ? "btn-primary"
+                      : "btn-secondary"
+                }`}
                 onClick={() => handleTfAnswer(true)}
               >
                 True
               </button>
               <button
                 type="button"
-                className={`btn ${tfSelection === false ? "btn-primary" : "btn-secondary"}`}
+                className={`btn ${
+                  tfResult
+                    ? tfResult.answer === false
+                      ? "btn-answer-correct"
+                      : tfResult.selected === false
+                        ? "btn-answer-wrong"
+                        : "btn-secondary"
+                    : tfSelection === false
+                      ? "btn-primary"
+                      : "btn-secondary"
+                }`}
                 onClick={() => handleTfAnswer(false)}
               >
                 False

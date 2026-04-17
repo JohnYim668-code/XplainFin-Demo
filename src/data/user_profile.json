@@ -1,0 +1,19 @@
+{
+  "user_id": "demo-user-001",
+  "persona": "teen_early_investor",
+  "preferred_explanation_style": "simple_analogy_plus_examples",
+  "risk_profile": {
+    "score": 5,
+    "label": "Balanced"
+  },
+  "learning_context": {
+    "level": "beginner_to_intermediate",
+    "top_weak_topics": ["ETF Diversification"],
+    "recent_incorrect_answers": 0,
+    "daily_task_performance": "steady"
+  },
+  "behavioral_signals": {
+    "chat_sentiment": "neutral",
+    "confidence_signal": "medium"
+  }
+}

@@ -1,8 +1,16 @@
 import React from "react";
 
-export default function Dashboard({ progress, totalLessons }) {
+function describeRiskLevel(score) {
+  if (score <= 3) return "Conservative";
+  if (score <= 7) return "Balanced";
+  return "Growth-seeking";
+}
+
+export default function Dashboard({ progress, totalLessons, onOpenWeakTopicLesson }) {
   const completedCount = progress.completedLessons.length;
   const completionRate = Math.round((completedCount / totalLessons) * 100);
+  const riskAppetiteScore = React.useState(() => Math.floor(Math.random() * 10) + 1)[0];
+  const riskLevel = describeRiskLevel(riskAppetiteScore);
 
   // Basic gamification badges based on milestones.
   const badges = [
@@ -43,6 +51,18 @@ export default function Dashboard({ progress, totalLessons }) {
         <article className="card">
           <h3>Progress</h3>
           <p className="metric">{completionRate}%</p>
+        </article>
+        <article className="card">
+          <h3>Risk Appetite Score</h3>
+          <p className="metric">{riskAppetiteScore} / 10</p>
+          <p className="card-hint muted">{riskLevel}</p>
+        </article>
+        <article className="card">
+          <h3>Top Weak Topic</h3>
+          <p className="metric">ETF Diversification</p>
+          <button type="button" className="btn btn-primary" onClick={onOpenWeakTopicLesson}>
+            Review lesson
+          </button>
         </article>
       </div>
 

@@ -3,18 +3,19 @@ import LearningPathView from "./LearningPathView";
 import LessonDetailView from "./LessonDetailView";
 import LessonCompletedView from "./LessonCompletedView";
 
-export default function Lessons({ modules, completedLessons, onCompleteLesson, onAwardXp }) {
-  const [expandedModuleIds, setExpandedModuleIds] = React.useState([modules[0]?.id]);
+export default function Lessons({
+  modules,
+  completedLessons,
+  onCompleteLesson,
+  onAwardXp,
+  onQuestionAttempt,
+  focusLessonId,
+  onFocusLessonHandled
+}) {
   const [activeModule, setActiveModule] = React.useState(null);
   const [activeLesson, setActiveLesson] = React.useState(null);
   const [view, setView] = React.useState("path");
   const [lastLessonXp, setLastLessonXp] = React.useState(0);
-
-  const handleToggleModule = (moduleId) => {
-    setExpandedModuleIds((prev) =>
-      prev.includes(moduleId) ? prev.filter((id) => id !== moduleId) : [...prev, moduleId]
-    );
-  };
 
   const handleOpenLesson = (module, lesson) => {
     setActiveModule(module);
@@ -28,6 +29,20 @@ export default function Lessons({ modules, completedLessons, onCompleteLesson, o
     setView("completed");
   };
 
+  React.useEffect(() => {
+    if (!focusLessonId) return;
+
+    for (const module of modules) {
+      const lesson = module.lessons.find((item) => item.id === focusLessonId);
+      if (!lesson) continue;
+      setActiveModule(module);
+      setActiveLesson(lesson);
+      setView("lesson");
+      onFocusLessonHandled?.();
+      return;
+    }
+  }, [focusLessonId, modules, onFocusLessonHandled]);
+
   if (view === "lesson" && activeLesson && activeModule) {
     return (
       <LessonDetailView
@@ -38,6 +53,7 @@ export default function Lessons({ modules, completedLessons, onCompleteLesson, o
         onBackToPath={() => setView("path")}
         onCompleteLesson={handleLessonFinished}
         onAwardXp={onAwardXp}
+        onQuestionAttempt={onQuestionAttempt}
       />
     );
   }
@@ -56,8 +72,6 @@ export default function Lessons({ modules, completedLessons, onCompleteLesson, o
   return (
     <LearningPathView
       modules={modules}
-      expandedModuleIds={expandedModuleIds}
-      onToggleModule={handleToggleModule}
       onOpenLesson={handleOpenLesson}
       completedLessons={completedLessons}
     />

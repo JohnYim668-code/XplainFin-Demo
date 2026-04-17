@@ -74,18 +74,18 @@ export default function AskAiPanel({
           className={`ask-ai-fab ${isOpen ? "active" : ""}`}
           onClick={() => onOpenChange(!isOpen)}
           aria-expanded={isOpen}
-          aria-label={isOpen ? "Close Ask AI" : "Ask AI"}
-          title="Ask AI"
+          aria-label={isOpen ? "Close Ask Pulse" : "Ask Pulse"}
+          title="Ask Pulse"
         >
-          <img src="/assistant-ai-icon.png" alt="Ask AI assistant icon" className="ask-ai-fab-art" />
+          <img src="/assistant-ai-icon.png" alt="Ask Pulse assistant icon" className="ask-ai-fab-art" />
         </button>
       ) : null}
 
       {isOpen ? (
-        <div className="ask-ai-panel" role="dialog" aria-label="Ask AI chat">
+        <div className="ask-ai-panel" role="dialog" aria-label="Ask Pulse chat">
           <div className="ask-ai-panel-header">
             <div>
-              <p className="ask-ai-panel-title">Ask AI</p>
+              <p className="ask-ai-panel-title">Ask Pulse</p>
               <p className="ask-ai-panel-sub muted">{lessonTitle}</p>
             </div>
             <button type="button" className="btn btn-secondary ask-ai-close" onClick={() => onOpenChange(false)}>

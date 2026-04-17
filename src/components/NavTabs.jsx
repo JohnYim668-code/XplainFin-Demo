@@ -3,6 +3,7 @@ import React from "react";
 const tabs = [
   { id: "dashboard", label: "Home / Dashboard" },
   { id: "lessons", label: "Lessons" },
+  { id: "explore", label: "Explore with Pulse" },
   { id: "quiz", label: "Quiz / Challenges" }
 ];
 
