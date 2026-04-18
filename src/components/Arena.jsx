@@ -1,4 +1,5 @@
 import React from "react";
+import StockChartModal, { buildMockSeries, CORAL, MINT } from "./StockChartModal";
 
 function clamp(n, a, b) {
   return Math.max(a, Math.min(b, n));
@@ -32,6 +33,18 @@ function sparkPath(values, w, h, pad = 8) {
       return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(" ");
+}
+
+function ChevronIcon({ expanded }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className={`arena-chevron ${expanded ? "expanded" : ""}`}
+      aria-hidden="true"
+    >
+      <path d="M5 7.5 10 12.5 15 7.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
 }
 
 const MOCK_ASSETS = [
@@ -139,6 +152,8 @@ export default function Arena({ currentUser }) {
   const startingEquityRef = React.useRef(0);
   const [equitySeries, setEquitySeries] = React.useState(() => Array.from({ length: 30 }, () => 10000));
 
+  const [expandedSymbol, setExpandedSymbol] = React.useState(MOCK_ASSETS[0].symbol);
+
   const [tradeOpen, setTradeOpen] = React.useState(false);
   const [tradeSymbol, setTradeSymbol] = React.useState(MOCK_ASSETS[0].symbol);
   const [tradeSide, setTradeSide] = React.useState("buy");
@@ -209,6 +224,10 @@ export default function Arena({ currentUser }) {
   const closeTrade = () => {
     setTradeOpen(false);
     setTradeError("");
+  };
+
+  const toggleExpanded = (symbol) => {
+    setExpandedSymbol((prev) => (prev === symbol ? null : symbol));
   };
 
   const estCostUsd = React.useMemo(() => {
@@ -310,33 +329,93 @@ export default function Arena({ currentUser }) {
             const delta = px - prev;
             const deltaPct = prev > 0 ? delta / prev : 0;
             const valueUsd = shares * px * (FX_TO_USD[a.ccy] ?? 1);
+            const isExpanded = expandedSymbol === a.symbol;
+            const sparkSeries = buildMockSeries({ rangeId: "1D", basePrice: px, symbol: a.symbol }).data;
+            const sparkValues = sparkSeries.map((point) => point.price);
+            const sparkUp =
+              sparkValues.length >= 2 ? sparkValues[sparkValues.length - 1] >= sparkValues[0] : true;
+            const sparkW = 136;
+            const sparkH = 42;
+            const spark = sparkPath(sparkValues, sparkW, sparkH, 4);
 
             return (
-              <div key={a.symbol} className="arena-holding-row" role="listitem">
-                <div className="arena-holding-left">
-                  <LogoBadge name={a.name} symbol={a.symbol} />
-                  <div className="arena-holding-meta">
-                    <div className="arena-holding-topline">
-                      <span className="arena-symbol-code">{a.symbol}</span>
-                      <span className="arena-venue muted">{a.venue}</span>
+              <div
+                key={a.symbol}
+                className={`arena-holding-row arena-holding-row-interactive ${isExpanded ? "expanded" : ""}`}
+                role="listitem"
+              >
+                <div
+                  className="arena-holding-toggle"
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isExpanded}
+                  onClick={() => toggleExpanded(a.symbol)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      toggleExpanded(a.symbol);
+                    }
+                  }}
+                >
+                  <div className="arena-holding-left">
+                    <LogoBadge name={a.name} symbol={a.symbol} />
+                    <div className="arena-holding-meta">
+                      <div className="arena-holding-topline">
+                        <span className="arena-symbol-code">{a.symbol}</span>
+                        <span className="arena-venue muted">{a.venue}</span>
+                      </div>
+                      <div className="arena-holding-name muted">{a.name}</div>
+                      <div className="arena-shares muted">{shares} sh owned</div>
                     </div>
-                    <div className="arena-holding-name muted">{a.name}</div>
+                  </div>
+
+                  <div className="arena-holding-spark-wrap" aria-hidden="true">
+                    <svg width={sparkW} height={sparkH} className="arena-holding-spark">
+                      <path
+                        d={spark}
+                        fill="none"
+                        stroke={sparkUp ? MINT : CORAL}
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+
+                  <div className="arena-holding-right">
+                    <div className="arena-holding-price">
+                      <span className={`arena-price ${dir}`}>{px.toFixed(2)} {a.ccy}</span>
+                      <span className={`arena-delta ${dir}`}>
+                        {dir === "flat" ? "—" : `${delta > 0 ? "+" : ""}${delta.toFixed(2)} (${percent(deltaPct)})`}
+                      </span>
+                    </div>
+                    <div className="arena-holding-bottomline">
+                      <span className="arena-value">{formatMoney(valueUsd, "USD")}</span>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openTrade(a.symbol);
+                        }}
+                      >
+                        Trade
+                      </button>
+                      <ChevronIcon expanded={isExpanded} />
+                    </div>
                   </div>
                 </div>
 
-                <div className="arena-holding-right">
-                  <div className="arena-holding-price">
-                    <span className={`arena-price ${dir}`}>{px.toFixed(2)} {a.ccy}</span>
-                    <span className={`arena-delta ${dir}`}>
-                      {dir === "flat" ? "—" : `${delta > 0 ? "+" : ""}${delta.toFixed(2)} (${percent(deltaPct)})`}
-                    </span>
-                  </div>
-                  <div className="arena-holding-bottomline">
-                    <span className="arena-shares muted">{shares} sh</span>
-                    <span className="arena-value">{formatMoney(valueUsd, "USD")}</span>
-                    <button type="button" className="btn btn-primary" onClick={() => openTrade(a.symbol)}>
-                      Trade
-                    </button>
+                <div className={`arena-holding-expand ${isExpanded ? "expanded" : ""}`}>
+                  <div className="arena-holding-expand-inner">
+                    {isExpanded ? (
+                      <StockChartModal
+                        symbol={a.symbol}
+                        name={a.name}
+                        venue={a.venue}
+                        ccy={a.ccy}
+                        currentPrice={px}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>

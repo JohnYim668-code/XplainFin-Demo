@@ -1223,6 +1223,22 @@ body {
   .arena-metrics {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
+
+  .arena-holding-toggle {
+    grid-template-columns: 1fr;
+  }
+
+  .arena-holding-spark-wrap {
+    justify-content: flex-start;
+  }
+
+  .arena-holding-price {
+    justify-items: start;
+  }
+
+  .arena-holding-bottomline {
+    justify-content: flex-start;
+  }
 }
 
 .arena-holdings-header {
@@ -1287,13 +1303,13 @@ body {
 
 .arena-price.up,
 .arena-delta.up {
-  color: #2fffd0;
+  color: #2DD4BF;
   animation: flash-up 420ms ease-out;
 }
 
 .arena-price.down,
 .arena-delta.down {
-  color: #ff6b7a;
+  color: #FB7185;
   animation: flash-down 420ms ease-out;
 }
 
@@ -1305,18 +1321,62 @@ body {
 
 .arena-holding-row {
   border-radius: 16px;
-  border: 1px solid rgba(66, 66, 66, 0.16);
-  background: rgba(255, 255, 255, 0.55);
-  padding: 0.7rem;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(12px);
+  padding: 0.75rem;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.6rem;
+  overflow: hidden;
+}
+
+.arena-holding-row-interactive {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.arena-holding-row-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(57, 57, 57, 0.12);
+  border-color: rgba(203, 213, 225, 0.95);
+}
+
+.arena-holding-row-interactive:focus-visible {
+  outline: 2px solid rgba(160, 206, 253, 0.95);
+  outline-offset: 2px;
+}
+
+.arena-holding-row-interactive.expanded {
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow: 0 16px 32px rgba(57, 57, 57, 0.1);
+}
+
+.arena-holding-toggle {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(120px, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.arena-holding-toggle:focus-visible {
+  outline: 2px solid rgba(160, 206, 253, 0.95);
+  outline-offset: 4px;
+  border-radius: 12px;
 }
 
 .arena-holding-left {
   display: flex;
   gap: 0.6rem;
   align-items: center;
+  min-width: 0;
 }
 
 .arena-logo {
@@ -1335,6 +1395,7 @@ body {
 .arena-holding-meta {
   display: grid;
   gap: 0.2rem;
+  min-width: 0;
 }
 
 .arena-holding-topline {
@@ -1352,22 +1413,34 @@ body {
   font-size: 0.86rem;
 }
 
+.arena-holding-spark-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arena-holding-spark {
+  width: 100%;
+  max-width: 136px;
+  height: 42px;
+  overflow: visible;
+}
+
 .arena-holding-right {
   display: grid;
   gap: 0.55rem;
+  min-width: 0;
 }
 
 .arena-holding-price {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.6rem;
-  align-items: baseline;
-  flex-wrap: wrap;
+  display: grid;
+  justify-items: end;
+  gap: 0.12rem;
 }
 
 .arena-holding-bottomline {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.55rem;
   align-items: center;
   flex-wrap: wrap;
@@ -1380,6 +1453,157 @@ body {
 
 .arena-shares {
   font-weight: 800;
+}
+
+.arena-holding-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms ease, opacity 220ms ease, margin-top 220ms ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.arena-holding-expand.expanded {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 0.2rem;
+}
+
+.arena-holding-expand-inner {
+  overflow: hidden;
+}
+
+.arena-chart-inline {
+  border-radius: 14px;
+  background: rgba(248, 250, 252, 0.64);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  backdrop-filter: blur(12px);
+  padding: 1rem;
+  color: #424242;
+}
+
+.arena-chart-inline .muted {
+  color: rgba(71, 85, 105, 0.8);
+}
+
+.arena-chart-inline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.arena-chart-inline-symbol {
+  margin: 0;
+  font-family: "Inter", "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.arena-chart-inline-name {
+  margin: 0.2rem 0 0;
+  font-size: 0.86rem;
+}
+
+.arena-chart-inline-last {
+  margin: 0;
+  font-family: "Inter", "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.arena-chart-inline-last.up {
+  color: #0D9488;
+}
+
+.arena-chart-inline-last.down {
+  color: #E11D48;
+}
+
+.arena-chart-range-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(203, 213, 225, 0.75);
+}
+
+.arena-chart-range-tab {
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 999px;
+  padding: 0.32rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  background: rgba(241, 245, 249, 0.85);
+  color: rgba(100, 116, 139, 0.95);
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.arena-chart-range-tab:hover {
+  color: #475569;
+  background: rgba(226, 232, 240, 0.85);
+}
+
+.arena-chart-range-tab.active {
+  background: rgba(160, 206, 253, 0.95);
+  color: #1e293b;
+  box-shadow: 0 0 20px rgba(160, 206, 253, 0.35);
+}
+
+.arena-chart-panel {
+  border-radius: 14px;
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  background: rgba(255, 255, 255, 0.54);
+  backdrop-filter: blur(10px);
+  padding: 0.35rem 0.25rem 0.15rem;
+}
+
+.arena-chart-prev-hint {
+  margin: 0.35rem 0.5rem 0.25rem;
+  font-size: 0.72rem;
+}
+
+.arena-stock-tooltip {
+  border-radius: 10px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  padding: 0.45rem 0.6rem;
+  box-shadow: 0 12px 24px rgba(57, 57, 57, 0.12);
+}
+
+.arena-stock-tooltip-price {
+  margin: 0;
+  font-weight: 950;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+}
+
+.arena-stock-tooltip-time {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  color: rgba(100, 116, 139, 0.92);
+}
+
+.arena-chevron {
+  width: 18px;
+  height: 18px;
+  color: rgba(57, 57, 57, 0.66);
+  transition: transform 180ms ease, color 180ms ease;
+  flex: 0 0 auto;
+}
+
+.arena-chevron.expanded {
+  transform: rotate(180deg);
+  color: rgba(57, 57, 57, 0.9);
 }
 
 .arena-modal-backdrop {
