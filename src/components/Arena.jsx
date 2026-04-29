@@ -310,7 +310,7 @@ export default function Arena({ currentUser }) {
           <article className="arena-metric-card arena-chart-card">
             <p className="arena-metric-label muted">1‑month P&L</p>
             <svg width={chartW} height={chartH} className="arena-spark">
-              <path d={chartPath} fill="none" stroke={chartUp ? "#2e7d50" : "#9b2c2c"} strokeWidth="3" />
+              <path d={chartPath} fill="none" stroke={chartUp ? MINT : CORAL} strokeWidth="3" />
             </svg>
           </article>
         </div>

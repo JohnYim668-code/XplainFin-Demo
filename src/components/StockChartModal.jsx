@@ -21,8 +21,8 @@ const RANGE_OPTIONS = [
 ];
 
 // Deeper trend colors for higher contrast on light glass surfaces
-export const MINT = "#0D9488"; // teal-600
-export const CORAL = "#E11D48"; // rose-600
+export const MINT = "#0F766E"; // teal-700
+export const CORAL = "#BE123C"; // rose-700
 const EXTENDED_STROKE = "rgba(148, 163, 184, 0.85)";
 const GRID = "rgba(148, 163, 184, 0.35)"; // slate-ish, subtle on light bg
 const PREV_CLOSE = "rgba(148, 163, 184, 0.95)"; // slate-400 baseline
@@ -253,8 +253,8 @@ export default function StockChartModal({ symbol, name, venue, ccy, currentPrice
           <AreaChart key={animKey} data={data} margin={{ top: 12, right: 8, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={stroke} stopOpacity={0.34} />
-                <stop offset="58%" stopColor={stroke} stopOpacity={0.08} />
+                <stop offset="0%" stopColor={stroke} stopOpacity={0.46} />
+                <stop offset="58%" stopColor={stroke} stopOpacity={0.18} />
                 <stop offset="100%" stopColor={stroke} stopOpacity={0} />
               </linearGradient>
             </defs>

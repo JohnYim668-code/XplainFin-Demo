@@ -1193,11 +1193,11 @@ body {
 }
 
 .arena-metric-sub.up {
-  color: #2fffd0;
+  color: #0f766e;
 }
 
 .arena-metric-sub.down {
-  color: #ff6b7a;
+  color: #be123c;
 }
 
 .arena-chart-card {
@@ -1303,13 +1303,13 @@ body {
 
 .arena-price.up,
 .arena-delta.up {
-  color: #2DD4BF;
+  color: #0f766e;
   animation: flash-up 420ms ease-out;
 }
 
 .arena-price.down,
 .arena-delta.down {
-  color: #FB7185;
+  color: #be123c;
   animation: flash-down 420ms ease-out;
 }
 
@@ -1517,11 +1517,11 @@ body {
 }
 
 .arena-chart-inline-last.up {
-  color: #0D9488;
+  color: #0f766e;
 }
 
 .arena-chart-inline-last.down {
-  color: #E11D48;
+  color: #be123c;
 }
 
 .arena-chart-range-tabs {
@@ -1735,12 +1735,12 @@ body {
 
 .arena-badge.buy {
   background: rgba(46, 125, 80, 0.14);
-  color: #2e7d50;
+  color: #0f766e;
 }
 
 .arena-badge.sell {
   background: rgba(155, 44, 44, 0.14);
-  color: #9b2c2c;
+  color: #be123c;
 }
 
 .arena-leaderboard {
@@ -1783,11 +1783,11 @@ body {
 }
 
 .arena-ret.up {
-  color: #2e7d50;
+  color: #0f766e;
 }
 
 .arena-ret.down {
-  color: #9b2c2c;
+  color: #be123c;
 }
 
 .arena-me-rank {
