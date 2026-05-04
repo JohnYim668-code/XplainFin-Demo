@@ -5,7 +5,7 @@ const tabs = [
   { id: "lessons", label: "Lessons" },
   { id: "explore", label: "Explore with Pulse" },
   { id: "arena", label: "Arena" },
-  { id: "quiz", label: "Quiz / Challenges" }
+  { id: "reels", label: "Reels / Shorts" }
 ];
 
 export default function NavTabs({ activeTab, onTabChange }) {

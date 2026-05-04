@@ -2,11 +2,10 @@ import React, { useMemo, useState } from "react";
 import NavTabs from "./components/NavTabs";
 import Dashboard from "./components/Dashboard";
 import Lessons from "./components/Lessons";
-import QuizChallenges from "./components/QuizChallenges";
+import ReelsSection from "./components/ReelsSection";
 import ExploreWithPulse from "./components/ExploreWithPulse";
 import Arena from "./components/Arena";
 import LearningTwinDrawer from "./components/LearningTwinDrawer";
-import { modules, quizByLesson } from "./data/curriculum";
 import { learningPathModules } from "./data/learningPathData";
 
 export default function App() {
@@ -47,10 +46,6 @@ export default function App() {
       ),
     []
   );
-
-  const awardPoints = (points) => {
-    setProgress((prev) => ({ ...prev, points: prev.points + points }));
-  };
 
   const awardXp = (amount) => {
     setProgress((prev) => ({ ...prev, xp: prev.xp + amount }));
@@ -246,14 +241,7 @@ export default function App() {
 
       {activeTab === "arena" ? <Arena currentUser={{ id: "demo-user-001", name: "You" }} /> : null}
 
-      {activeTab === "quiz" ? (
-        <QuizChallenges
-          modules={modules}
-          quizByLesson={quizByLesson}
-          onAwardPoints={awardPoints}
-          onCompleteLesson={completeLesson}
-        />
-      ) : null}
+      {activeTab === "reels" ? <ReelsSection /> : null}
 
       <LearningTwinDrawer isOpen={twinOpen} onClose={() => setTwinOpen(false)} profile={adaptiveUserProfile} />
     </main>
