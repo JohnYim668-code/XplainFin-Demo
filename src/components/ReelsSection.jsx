@@ -62,6 +62,7 @@ function ActionButton({ label, icon, onClick, count }) {
 
 export default function ReelsSection() {
   const cardRefs = React.useRef({});
+  const toggleLockRef = React.useRef({});
 
   const initialLikes = React.useMemo(
     () =>
@@ -122,7 +123,13 @@ export default function ReelsSection() {
   }, [closeAllMenus]);
 
   const togglePlay = (reelId) => {
+    if (toggleLockRef.current[reelId]) return;
+    // Prevent rapid play/pause races that can trigger interrupted play() errors.
+    toggleLockRef.current[reelId] = true;
     setPlayingById((prev) => ({ ...prev, [reelId]: !prev[reelId] }));
+    window.setTimeout(() => {
+      toggleLockRef.current[reelId] = false;
+    }, 180);
   };
 
   const toggleMute = (reelId) => {
@@ -196,14 +203,14 @@ export default function ReelsSection() {
               <div className="reel-player-wrap with-overlay">
                 <ReactPlayer
                   // Keep URL normalization so Shorts links play in embedded mode.
-                  url={normalizeYoutubeUrl(reel.url)}
+                  src={normalizeYoutubeUrl(reel.url)}
                   controls={false}
                   playing={playingById[reel.id]}
                   muted={mutedById[reel.id]}
                   volume={volumeById[reel.id]}
                   width="100%"
                   height="100%"
-                  playsinline
+                  playsInline
                   config={{
                     youtube: {
                       playerVars: {
