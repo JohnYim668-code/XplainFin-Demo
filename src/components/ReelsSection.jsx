@@ -19,7 +19,7 @@ const DEMO_REELS = [
     id: "reel-2",
     title: "ETF vs Single Stock in 3 Minutes",
     channel: "Finance in a Minute",
-    url: "https://www.youtube.com/watch?v=G6wbv9x7L98",
+    url: "https://www.youtube.com/shorts/-9Lwo2Uao9U",
     duration: "2:47",
     description: "Compares ETF diversification against picking single names, with beginner-friendly risk examples.",
     comments: [
@@ -32,7 +32,7 @@ const DEMO_REELS = [
     id: "reel-3",
     title: "Risk/Reward Basics for Beginners",
     channel: "Invest Smart Daily",
-    url: "https://www.youtube.com/watch?v=9xwazD5SyVg",
+    url: "https://www.youtube.com/shorts/dmanqHAR_O4",
     duration: "2:32",
     description: "Explains risk/reward setups and position sizing basics for new investors.",
     comments: [
